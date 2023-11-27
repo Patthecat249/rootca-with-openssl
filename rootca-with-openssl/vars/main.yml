@@ -1,0 +1,47 @@
+---
+# vars file for rootca-with-openssl
+# Diese Variablen legen die Basis-Ordner für die Root-CA fest
+dir: "./demo-CA/"
+dir_rootca: "{{ dir }}rootca/"
+dir_rootca_database: "{{ dir_rootca }}database/"
+dir_rootca_private: "{{ dir_rootca }}private/"
+dir_rootca_serial: "{{ dir_rootca }}serial/"
+dir_rootca_cnf: "{{ dir_rootca }}cnf/"
+dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
+
+# Hier kann man den FQDN der Root-CA und des Servers angeben
+organization:
+  # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
+  rootca: "/CN=serverLA-rootCA"
+  # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
+  server: "/CN=serverLA"
+
+# Hier kann man die Gültigkeitslänge der Zertifikate angeben
+days:
+  rootca: "3650" # 10 Jahre für rootCA
+  server_crt: "1825" # 5 Jahre für das Server-Zertifikat
+
+# Namen der RootCA, des Key und des Cert
+rootca:
+  default_rootca_name: "serverLA-rootca"
+  default_rootca_crt_name: "serverLA-rootca.crt"
+  default_rootca_key_name: "serverLA-rootca.key"
+
+# Namen des Server Cert, Key und CSR
+server_cert:
+  server_key_name: "serverLA.key"
+  server_csr_name: "serverLA.csr"
+  server_crt_name: "serverLA.crt"
+
+root_domain: "kbs.de"
+
+# Alternative DNS-Namen
+## Für die openssl.cnf
+dns_alt_names:
+  dns1: "{{rootca.default_rootca_name}}"
+  dns2: "{{rootca.default_rootca_name}}.{{root_domain}}"
+
+## Für den Server
+server_dns_alt_names:
+  dns1: "serverLA"
+  dns2: "10.23.44.123"

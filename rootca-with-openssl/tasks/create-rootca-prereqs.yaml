@@ -1,0 +1,18 @@
+---
+# tasks file for rootca-with-openssl
+- name: "Create Working Directories for openssl-rootca"
+  ansible.builtin.file:
+    path: "{{item}}"
+    state: directory
+  loop:
+    - "{{ dir_rootca }}"
+    - "{{ dir_rootca_database }}"
+    - "{{ dir_rootca_private }}"
+    - "{{ dir_rootca_serial }}"
+    - "{{ dir_rootca_cnf }}"
+    - "{{ dir_new_ssl_certs }}"
+
+- name: "Create openssl.cnf"
+  template:
+    src: "openssl.j2"
+    dest: "{{dir_rootca_cnf}}openssl.cnf"
