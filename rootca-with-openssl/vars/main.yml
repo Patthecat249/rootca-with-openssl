@@ -12,9 +12,9 @@ dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
 # Hier kann man den FQDN der Root-CA und des Servers angeben
 organization:
   # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
-  rootca: "/CN=serverLA-rootCA"
+  rootca: "/CN=10.23.42.233/ST=NRW/C=DE/L=Bochum/E=rz@kbs.de/O=Knappschaft Bahn See/OU=SSG"
   # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
-  server: "/CN=serverLA"
+  server: "/CN=10.23.42.233/ST=NRW/C=DE/L=Bochum/E=rz@kbs.de/O=Knappschaft Bahn See/OU=SSG"
 
 # Hier kann man die Gültigkeitslänge der Zertifikate angeben
 days:
@@ -23,7 +23,7 @@ days:
 
 # Namen der RootCA, des Key und des Cert
 rootca:
-  default_rootca_name: "serverLA-rootca"
+  default_rootca_name: "serverLA"
   default_rootca_crt_name: "serverLA-rootca.crt"
   default_rootca_key_name: "serverLA-rootca.key"
 
@@ -44,4 +44,4 @@ dns_alt_names:
 ## Für den Server
 server_dns_alt_names:
   dns1: "serverLA"
-  dns2: "10.23.44.123"
+  dns2: "10.23.42.233"

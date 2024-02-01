@@ -1,0 +1,94 @@
+- name: "### --- Playbook to create a rootCA with openssl --- ###"
+  hosts: sannav
+  gather_facts: no
+  vars:
+    dir_root: "/sannav/"
+    dir_binaries: "{{dir_root}}binaries/"
+    dir_rootca: "{{dir_root}}rootca/"
+    dir_nfs_mount: "/mnt/nfs/"
+    nfs_server: "nas.home.local"
+    nfs_path: "/volume1/nfs-iso/"
+    file_sannav_portal: "Portal_2.2.2a-distribution.tar.gz"
+  tasks:
+# Create Working Directories
+    - name: "Create Working Directories"
+      ansible.builtin.file:
+        path: "{{item}}"
+        state: directory
+      loop:
+        - "{{dir_root}}"
+        - "{{dir_binaries}}"
+        - "{{dir_rootca}}"
+        - "{{dir_nfs_mount}}"
+
+# Storage Prerequisites
+# Create VG
+    - name: Create a volume group 
+      community.general.lvg:
+        vg: vg-sannav
+        pvs: /dev/sdb
+        pesize: 4
+
+# Create LV
+    - name: Create a logical volume 
+      community.general.lvol:
+        vg: vg-sannav
+        lv: lv-sannav
+        size: 80G
+        pvs:
+          - /dev/sdb
+
+# Create Filesystem
+    - name: format the xfs filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/mapper/vg--sannav-lv--sannav
+
+# Mount filesystem
+    - name: mount the lv on /sannav
+      mount:
+        path: /sannav
+        src: /dev/mapper/vg--sannav-lv--sannav
+        fstype: xfs
+        state: mounted
+
+# Install some Software
+    - name: "Install Requirement-Software-Packages"
+      ansible.builtin.yum:
+        name:
+          - nfs-utils.x86_64
+        state: present
+
+# Mount NFS Share
+    - name: Mount NFS to Server /mnt/nfs
+      mount:
+        fstype: nfs
+        opts: "nfsvers=3,nolock"
+        dump: 0
+        passno: 0
+        state: mounted
+        src: "{{nfs_server}}:{{nfs_path}}"
+        path: "{{dir_nfs_mount}}"
+
+# Check if file exists
+    - name: Check if file exists
+      stat:
+        path: "{{dir_binaries}}{{file_sannav_portal}}"  # Pfade entsprechend anpassen
+      register: file_status
+
+# Copy file 
+    - name: "Copy brocade tar-file from nfs to server"
+      ansible.builtin.copy:
+        src: "{{dir_nfs_mount}}downloaded-iso/linux/{{file_sannav_portal}}"
+        dest: "{{dir_binaries}}"
+        remote_src: true
+      when: not file_status.stat.exists
+
+# Unarchive
+    - name: "Entpacke SANnav-Portal-Tar-file"
+      unarchive:
+        src: "{{dir_binaries}}{{file_sannav_portal}}"
+        dest: "{{dir_binaries}}"
+        remote_src: true
+
+# Installiere SANnav-Portal
