@@ -12,10 +12,8 @@ dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
 # Hier kann man den FQDN der Root-CA und des Servers angeben
 organization:
   # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
-  # rootca: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
   rootca: "/CN=artifactory"
   # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
-  # server: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
   server: "/CN=artifactory"
 
 # Hier kann man die Gültigkeitslänge der Zertifikate angeben
