@@ -1,8 +1,8 @@
 ---
 # Private Key für RootCA erstellen
 - name: "Private-Key für RootCA erstellen"
-  raw: "/usr/bin/openssl genpkey -algorithm RSA -out {{ dir_rootca }}{{rootca.default_rootca_key_name}} -aes256"
+  raw: "/usr/bin/openssl genpkey -algorithm RSA -out {{ dir_rootca }}{{rootca.default_rootca_key_name}} -aes256 -pass pass:{{rootca.passphrase_for_private_key}}"
 
 # Certificate Request (CSR) für RootCA erstellen
 - name: "Certificate Request (CSR) für RootCA erstellen"
-  raw: "/usr/bin/openssl req -x509 -new -key {{ dir_rootca }}{{rootca.default_rootca_key_name}} -out {{ dir_rootca }}{{rootca.default_rootca_crt_name}} -days {{ days.rootca }} -config {{dir_rootca_cnf}}openssl.cnf -subj \"{{organization.rootca}}\""
+  raw: "/usr/bin/openssl req -x509 -new -key {{ dir_rootca }}{{rootca.default_rootca_key_name}} -out {{ dir_rootca }}{{rootca.default_rootca_crt_name}} -days {{ days.rootca }} -config {{dir_rootca_cnf}}openssl.cnf -subj \"{{organization.rootca}}\" -passin pass:{{rootca.passphrase_for_private_key}}"

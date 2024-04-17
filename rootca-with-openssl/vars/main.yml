@@ -1,7 +1,7 @@
 ---
 # vars file for rootca-with-openssl
 # Diese Variablen legen die Basis-Ordner für die Root-CA fest
-dir: "./demo-CA/"
+dir: "./artifactory-CA/"
 dir_rootca: "{{ dir }}rootca/"
 dir_rootca_database: "{{ dir_rootca }}database/"
 dir_rootca_private: "{{ dir_rootca }}private/"
@@ -12,9 +12,11 @@ dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
 # Hier kann man den FQDN der Root-CA und des Servers angeben
 organization:
   # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
-  rootca: "/CN=10.23.42.233/ST=NRW/C=DE/L=Bochum/E=rz@kbs.de/O=Knappschaft Bahn See/OU=SSG"
+  # rootca: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
+  rootca: "/CN=artifactory"
   # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
-  server: "/CN=10.23.42.233/ST=NRW/C=DE/L=Bochum/E=rz@kbs.de/O=Knappschaft Bahn See/OU=SSG"
+  # server: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
+  server: "/CN=artifactory"
 
 # Hier kann man die Gültigkeitslänge der Zertifikate angeben
 days:
@@ -23,25 +25,31 @@ days:
 
 # Namen der RootCA, des Key und des Cert
 rootca:
-  default_rootca_name: "serverLA"
-  default_rootca_crt_name: "serverLA-rootca.crt"
-  default_rootca_key_name: "serverLA-rootca.key"
+  default_rootca_name: "artifactory"
+  default_rootca_crt_name: "artifactory-rootca.crt"
+  default_rootca_key_name: "artifactory-rootca.key"
+  passphrase_for_private_key: "Test1234"
 
 # Namen des Server Cert, Key und CSR
 server_cert:
-  server_key_name: "serverLA.key"
-  server_csr_name: "serverLA.csr"
-  server_crt_name: "serverLA.crt"
+  server_key_name: "artifactory.key"
+  server_csr_name: "artifactory.csr"
+  server_crt_name: "artifactory.crt"
+  passphrase_for_private_key: "Test1234"
 
-root_domain: "kbs.de"
+
+# root_domain: "kbs.de"
+root_domain: ""
 
 # Alternative DNS-Namen
 ## Für die openssl.cnf
 dns_alt_names:
   dns1: "{{rootca.default_rootca_name}}"
   dns2: "{{rootca.default_rootca_name}}.{{root_domain}}"
+  dns3: "*.artifactory.home.local"
 
 ## Für den Server
 server_dns_alt_names:
-  dns1: "serverLA"
-  dns2: "10.23.42.233"
+  dns1: "artifactory"
+  dns2: "10.0.249.82"
+  dns3: "*.artifactory.home.local"

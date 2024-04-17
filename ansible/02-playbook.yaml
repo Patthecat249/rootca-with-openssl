@@ -1,4 +1,4 @@
-- name: "### --- Playbook to create a rootCA with openssl --- ###"
+- name: "### --- Playbook to install SANnav --- ###"
   hosts: sannav
   gather_facts: no
   vars:
@@ -57,10 +57,15 @@
       ansible.builtin.yum:
         name:
           - nfs-utils.x86_64
-          - ipcalc-0.2.4-4.el8.x86_64
-          - lsof-4.93.2-1.el8.x86_64
-          - rng-tools-6.16-1.el8.x86_64
-          - bind-utils-32:9.11.36-11.el8_9.x86_64
+          - net-tools
+          # - ipcalc-0.2.4-4.el8.x86_64
+          - initscripts-9.49.53-1.el7_9.1.x86_64
+          # - lsof-4.93.2-1.el8.x86_64
+          - lsof-4.87-6.el7.x86_64
+          # - rng-tools-6.16-1.el8.x86_64
+          - rng-tools-6.3.1-5.el7.x86_64
+          # - bind-utils-32:9.11.36-11.el8_9.x86_64
+          - bind-utils.x86_64
         state: present
 
 # Mount NFS Share

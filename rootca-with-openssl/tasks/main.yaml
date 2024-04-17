@@ -1,0 +1,8 @@
+- name: Create prerequisites for root CA
+  include_tasks: create-rootca-prereqs.yaml
+
+- name: Create root CA
+  include_tasks: create-rootca.yaml
+
+- name: Create server certificate
+  include_tasks: create-server-certificate.yaml

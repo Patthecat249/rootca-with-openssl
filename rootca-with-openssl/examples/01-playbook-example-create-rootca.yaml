@@ -1,0 +1,61 @@
+- name: "### --- Playbook to create a rootCA with openssl --- ###"
+  hosts: 127.0.0.1
+  gather_facts: no
+  vars:
+      
+  tasks:
+    - name: "Create rootCA and Server-Certificate"
+      include_role:
+        name: rootca-with-openssl
+      vars:
+        # These variables define the folder structure of your Root-CA
+        # This is the installation-folder of your rootCA. Everything will be placed in this folder
+        dir: "./example-CA/"
+        # This is the root-folder of your rootCA and some necessary needed folders
+        dir_rootca: "{{ dir }}rootca/"
+        dir_rootca_database: "{{ dir_rootca }}database/"
+        dir_rootca_private: "{{ dir_rootca }}private/"
+        dir_rootca_serial: "{{ dir_rootca }}serial/"
+        dir_rootca_cnf: "{{ dir_rootca }}cnf/"
+        # This is the folder, where your ssl-server-certificates will be placed. Please have a look inside for new created ssl-certificates
+        dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
+
+        # Here you can define the FQDN of the Root-CA
+        organization:
+          # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
+          rootca: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
+          # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
+          server: "/CN=10.23.42.233/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=pascal.weckler@dxc.de/O=BW/OU=Marine"
+
+        # Here you can define the length of your rootCA-certificate and server-cert angeben
+        days:
+          rootca: "3650" # 10 years for rootCA
+          server_crt: "1825" # 5 years for the server-certificate
+
+        # Name of the RootCA, the private Key and the Cert
+        rootca:
+          default_rootca_name: "artifactory"
+          default_rootca_crt_name: "artifactory-rootca.crt"
+          default_rootca_key_name: "artifactory-rootca.key"
+          passphrase_for_private_key: "Test1234"
+
+        # Name of the Server Cert, Key und CSR
+        server_cert:
+          server_key_name: "artifactory.key"
+          server_csr_name: "artifactory.csr"
+          server_crt_name: "artifactory.crt"
+          passphrase_for_private_key: "Test1234"
+
+        # This is the base-domain-name
+        root_domain: "kbs.de"
+
+        # Alternative DNS-Names
+        ## for the openssl.cnf
+        dns_alt_names:
+          dns1: "{{rootca.default_rootca_name}}"
+          dns2: "{{rootca.default_rootca_name}}.{{root_domain}}"
+
+        ## for the Server
+        server_dns_alt_names:
+          dns1: "artifactory"
+          dns2: "10.23.42.233"
