@@ -1,0 +1,30 @@
+- name: "### --- Playbook to create a rootCA with openssl --- ###"
+  hosts: 127.0.0.1
+  gather_facts: no
+  vars:
+      
+  tasks:
+    - name: "Create a SSL-Server-Certificate"
+      include_role:
+        name: rootca-with-openssl
+        tasks_from: create-server-certificate.yaml
+      vars:
+        # This is the name and ip-adress of the system to which the ssl-certificate will be applied
+        ssl_server_name: "test-server"
+        ssl_server_ip: "192.168.0.1"
+
+        # Here you can define the length of your rootCA-certificate and server-cert angeben
+        days:
+          server_crt: "365" # 1 year for the server-certificate
+
+        # Name of the Server Cert, Key und CSR
+        ssl_server_key_name: "{{ssl_server_name}}.key"
+        ssl_server_csr_name: "{{ssl_server_name}}.csr"
+        ssl_server_crt_name: "{{ssl_server_name}}.crt"
+        ssl_server_passphrase_for_private_key: "Test1234"
+
+        # Alternative DNS-Names
+        ## for the Server
+        server_dns_alt_names_dns1: "{{ssl_server_name}}"
+        server_dns_alt_names_dns2: "{{ssl_server_ip}}"
+        server_dns_alt_names_dns3: "{{ssl_server_name}}.{{root_domain}}"

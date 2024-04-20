@@ -1,9 +1,9 @@
 [ ca ]
-default_ca = {{rootca.default_rootca_name}}
+default_ca = {{rootca_server_name}}
 
 [ myCA ]
 dir = {{dir}}
-certificate = {{dir_rootca}}{{rootca.default_rootca_crt_name}}
+certificate = {{dir_rootca}}{{rootca_server_crt_name}}
 database = {{dir_rootca_database}}index.txt
 new_certs_dir = {{dir_new_ssl_certs}}
 serial = {{dir_rootca_serial}}serial
@@ -38,6 +38,6 @@ extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = {{dns_alt_names.dns1}}
-DNS.2 = {{dns_alt_names.dns2}}
-DNS.3 = {{dns_alt_names.dns3}}
+DNS.1 = {{dns_alt_names_dns1}}
+DNS.2 = {{dns_alt_names_dns2}}
+DNS.3 = {{dns_alt_names_dns3}}

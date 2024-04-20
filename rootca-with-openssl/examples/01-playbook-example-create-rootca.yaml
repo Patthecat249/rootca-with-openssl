@@ -33,27 +33,25 @@
           server_crt: "1825" # 5 years for the server-certificate
 
         # Name of the RootCA, the private Key and the Cert
-        rootca:
-          default_rootca_name: "artifactory"
-          default_rootca_crt_name: "artifactory-rootca.crt"
-          default_rootca_key_name: "artifactory-rootca.key"
-          passphrase_for_private_key: "Test1234"
+        rootca_server_name: "artifactory"
+        rootca_server_crt_name: "artifactory-rootca.crt"
+        rootca_server_key_name: "artifactory-rootca.key"
+        rootca_server_passphrase_for_private_key: "Test1234"
 
         # Name of the Server Cert, Key und CSR
-        server_cert:
-          server_key_name: "artifactory.key"
-          server_csr_name: "artifactory.csr"
-          server_crt_name: "artifactory.crt"
-          passphrase_for_private_key: "Test1234"
+        ssl_server_key_name: "artifactory.key"
+        ssl_server_csr_name: "artifactory.csr"
+        ssl_server_crt_name: "artifactory.crt"
+        ssl_server_passphrase_for_private_key: "Test1234"
 
         # This is the base-domain-name
-        root_domain: "kbs.de"
+        root_domain: "home.local"
 
         # Alternative DNS-Names
         ## for the openssl.cnf
         dns_alt_names:
-          dns1: "{{rootca.default_rootca_name}}"
-          dns2: "{{rootca.default_rootca_name}}.{{root_domain}}"
+          dns1: "{{rootca_server_name}}"
+          dns2: "{{rootca_server_name}}.{{root_domain}}"
 
         ## for the Server
         server_dns_alt_names:

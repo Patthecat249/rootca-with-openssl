@@ -32,11 +32,10 @@
           server_crt: "1825" # 5 years for the server-certificate
 
         # Name of the Server Cert, Key und CSR
-        server_cert:
-          server_key_name: "{{server_dns_name}}.key"
-          server_csr_name: "{{server_dns_name}}.csr"
-          server_crt_name: "{{server_dns_name}}.crt"
-          passphrase_for_private_key: "Test1234"
+        ssl_server_key_name: "{{server_dns_name}}.key"
+        ssl_server_csr_name: "{{server_dns_name}}.csr"
+        ssl_server_crt_name: "{{server_dns_name}}.crt"
+        ssl_server_passphrase_for_private_key: "Test1234"
 
         # Alternative DNS-Names
         ## for the Server

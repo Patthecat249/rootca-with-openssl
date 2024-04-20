@@ -1,53 +1,65 @@
 ---
 # vars file for rootca-with-openssl
-# Diese Variablen legen die Basis-Ordner für die Root-CA fest
-dir: "./artifactory-CA/"
+# Here you must define your Distingushed Name of your Root-CA
+## This will be use by the request to create the rootca-certificate and is used by Task "Certificate Request (CSR) für RootCA erstellen"
+# distinguished_name: "/CN=PrivateRootCA/C=DE/ST=Berlin/L=Berlin/OU=Home"
+distinguished_name:
+  rootca: "/CN=PrivateRootCA/C=DE/ST=Berlin/L=Berlin/OU=Home"
+  server: "/CN={{ssl_server_name}}.{{root_domain}}"
+
+# This is your dns-name of your base-domain. You can only create ssl-certificates in your dns-schema
+root_domain: "home.local"
+
+# The name of your RootCA-Server-Hostname, the private-key-name and the ssl-certificate-name of your rootCA
+rootca_server_name: "pki01"
+rootca_server_ip: "10.0.249.82"
+rootca_server_crt_name: "{{rootca_server_name}}-rootca.crt"
+rootca_server_key_name: "{{rootca_server_name}}-rootca.key"
+rootca_server_passphrase_for_private_key: "Test1234"
+
+# The name of a Server, the private-key and the ssl-certificate of a server
+ssl_server_name: "patricks-server"
+ssl_server_ip: "10.0.249.82"
+ssl_server_key_name: "{{ssl_server_name}}.key"
+ssl_server_csr_name: "{{ssl_server_name}}.csr"
+ssl_server_crt_name: "{{ssl_server_name}}.crt"
+ssl_server_passphrase_for_private_key: "Test1234"
+
+# These vars define the folder structure of your ROOT-CA
+# Only customize the "dir"-variable
+dir: "./my-root-ca/"
+
+# This is the folder, where your rootca-certificate and your private key will be placed
 dir_rootca: "{{ dir }}rootca/"
+
+# These three folders are needed for internal openssl-use. It is optional to change them. You can let them as they are.
 dir_rootca_database: "{{ dir_rootca }}database/"
 dir_rootca_private: "{{ dir_rootca }}private/"
 dir_rootca_serial: "{{ dir_rootca }}serial/"
+
+# This is the folder, where your openssl-config-file will be placed
+## There is a jinja2-template which will be used
+## templates/openssl.j2
 dir_rootca_cnf: "{{ dir_rootca }}cnf/"
+
+# This is the folder, where new ssl-server-certificates will be placed
 dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
 
-# Hier kann man den FQDN der Root-CA und des Servers angeben
-organization:
-  # rootca: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA-rootCA"
-  rootca: "/CN=artifactory"
-  # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
-  server: "/CN=artifactory"
+
 
 # Hier kann man die Gültigkeitslänge der Zertifikate angeben
+# Here you can set up the validity-length of your certificates
 days:
-  rootca: "3650" # 10 Jahre für rootCA
-  server_crt: "1825" # 5 Jahre für das Server-Zertifikat
-
-# Namen der RootCA, des Key und des Cert
-rootca:
-  default_rootca_name: "artifactory"
-  default_rootca_crt_name: "artifactory-rootca.crt"
-  default_rootca_key_name: "artifactory-rootca.key"
-  passphrase_for_private_key: "Test1234"
-
-# Namen des Server Cert, Key und CSR
-server_cert:
-  server_key_name: "artifactory.key"
-  server_csr_name: "artifactory.csr"
-  server_crt_name: "artifactory.crt"
-  passphrase_for_private_key: "Test1234"
-
-
-# root_domain: "kbs.de"
-root_domain: ""
+  rootca: "3650" # 10 years in days for your rootCA
+  server_crt: "1825" # 5 years in days for your Server-Certificate
 
 # Alternative DNS-Namen
 ## Für die openssl.cnf
-dns_alt_names:
-  dns1: "{{rootca.default_rootca_name}}"
-  dns2: "{{rootca.default_rootca_name}}.{{root_domain}}"
-  dns3: "*.artifactory.home.local"
+dns_alt_names_dns1: "{{rootca_server_name}}"
+dns_alt_names_dns2: "{{rootca_server_name}}.{{root_domain}}"
+dns_alt_names_dns3: "{{rootca_server_ip}}"
 
 ## Für den Server
-server_dns_alt_names:
-  dns1: "artifactory"
-  dns2: "10.0.249.82"
-  dns3: "*.artifactory.home.local"
+server_dns_alt_names_dns1: "{{ssl_server_name}}"
+server_dns_alt_names_dns2: "{{ssl_server_name}}.{{root_domain}}"
+server_dns_alt_names_dns3: "{{ssl_server_ip}}"
