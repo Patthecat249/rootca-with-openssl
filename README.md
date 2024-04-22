@@ -11,7 +11,7 @@ git clone https://github.com/Patthecat249/rootca-with-openssl.git
 cd rootca-with-openssl/ansible
 
 # Execute the Playbook
-ansible-playbook 01-playbook.yaml
+ansible-playbook 01-playbook-create-rootca.yaml
 ```
 
 # How it works
