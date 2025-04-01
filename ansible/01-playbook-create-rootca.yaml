@@ -1,7 +1,8 @@
 - name: "### --- Playbook to create a rootCA with openssl --- ###"
-  hosts: 127.0.0.1
-  gather_facts: no
-      
+  hosts: pi
+  become_user: pi
+  gather_facts: false
+
 # Beginn TASKs
   tasks:
     # - import_role:
@@ -9,18 +10,18 @@
 
 # Create prerequisites of the RootCA
     - name: Run setup of rootCA-Folder-Structure
-      import_role:
+      ansible.builtin.import_role:
         name: rootca-with-openssl
         tasks_from: create-rootca-prereqs.yaml
 
 # Create the RootCA private-Key, csr and crt
     - name: Run Creation of rootCA
-      import_role:
+      ansible.builtin.import_role:
         name: rootca-with-openssl
         tasks_from: create-rootca.yaml
 
 # Create the server-Certifikat for serverLA
     - name: Run Creation of server-certificate
-      import_role:
+      ansible.builtin.import_role:
         name: rootca-with-openssl
         tasks_from: create-server-certificate.yaml

@@ -1,11 +1,11 @@
 - name: "### --- Playbook to create a rootCA with openssl --- ###"
-  hosts: 127.0.0.1
-  gather_facts: no
+  hosts: pi
+  gather_facts: false
   vars:
-      
+
   tasks:
     - name: "Create a SSL-Server-Certificate"
-      include_role:
+      ansible.builtin.include_role:
         name: rootca-with-openssl
         tasks_from: create-server-certificate.yaml
       vars:
