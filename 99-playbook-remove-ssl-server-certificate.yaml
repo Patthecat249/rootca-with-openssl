@@ -1,0 +1,22 @@
+# Remove the rootCA
+- name: "### --- Playbook to remove the ssl-server-certificate --- ###"
+  hosts: pi
+  become_user: pi
+  become: false
+  gather_facts: true
+  vars:
+    # This is the name and ip-adress of the system to which the ssl-certificate will be applied
+    # dnsname: ""
+    # serverip: ""
+    # # Name of the Server Cert, Key und CSR
+    # ssl_server_key_name: "{{ dnsname }}.{{ root_domain }}.key"
+    # ssl_server_csr_name: "{{ dnsname }}.{{ root_domain }}.csr"
+    # ssl_server_crt_name: "{{ dnsname }}.{{ root_domain }}.crt"
+
+  # Beginn TASKs
+  tasks:
+    # Remove the RootCA
+    - name: Remove the rootCA-Folder-Structure
+      ansible.builtin.import_role:
+        name: rootca-with-openssl
+        tasks_from: remove-server-certificate.yaml

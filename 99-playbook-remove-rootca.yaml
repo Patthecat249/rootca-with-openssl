@@ -1,0 +1,13 @@
+# Remove the rootCA
+- name: "### --- Playbook to remove the rootCA --- ###"
+  hosts: pi
+  become_user: pi
+  become: false
+  gather_facts: true
+  # Beginn TASKs
+  tasks:
+    # Remove the RootCA
+    - name: Remove the rootCA-Folder-Structure
+      ansible.builtin.import_role:
+        name: rootca-with-openssl
+        tasks_from: remove-rootca.yaml

@@ -19,36 +19,38 @@ ansible-playbook 01-playbook-create-rootca.yaml
 ## Create a SSL-Server-Certificate, Private-Key and CSR by only adding a dns-name
 ```bash
 ## Create a SSL-Certificate, Private-Key and CSR
-ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "ssl_server_name=test-server ssl_server_ip=192.168.1.100"
-ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "ssl_server_name=example-server ssl_server_ip=192.168.1.101"
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=test-server serverip=192.168.1.100"
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=example-server serverip=192.168.1.101"
 
 # Output
 my-root-ca/new-created-ssl-certs:
--rw-r--r-- 1 root root 1472 Apr 20 13:14 test-server.crt    
--rw-r--r-- 1 root root  985 Apr 20 13:14 test-server.csr    
+-rw-r--r-- 1 root root 1472 Apr 20 13:14 test-server.crt
+-rw-r--r-- 1 root root  985 Apr 20 13:14 test-server.csr
 -rw------- 1 root root 1874 Apr 20 13:14 test-server.key
 ```
 
 ## Create a wildcard certificate
+
 ```bash
 ## Create a Wildcard-SSL-Certificate, Private-Key and CSR
-ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "ssl_server_name=wildcard-server ssl_server_ip=192.168.1.100 server_dns_alt_names_dns3=*.wildcard-server.home.local"
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=wildcard-server serverip=192.168.1.100 alt3=*.wildcard-server.home.local"
 
 
 ```
 
 
 ## Troubleshoot your CA
+
 ```bash
-## PWD 
+## PWD
 # /root/git/rootca-with-openssl/ansible
 
 # See your Root-CA-Certificate
-openssl x509 -noout -text -in my-root-ca/rootca/pki01-rootca.crt
+openssl x509 -noout -text -in my-root-ca/rootca/pi-rootca.crt
 
 # See your SSL-Server-Certificate
 openssl x509 -noout -text -in my-root-ca/new-created-ssl-certs/patricks-server.crt
 
 # Verify or Validate if your ssl-certificate is trusted by your CA
-openssl verify -CAfile my-root-ca/rootca/pki01-rootca.crt my-root-ca/new-created-ssl-certs/patricks-server.crt
+openssl verify -CAfile my-root-ca/rootca/pi-rootca.crt my-root-ca/new-created-ssl-certs/patricks-server.crt
 ```

@@ -1,0 +1,9 @@
+---
+- name: "Entferne die Dateien für {{ dnsname }}"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_key_name }}"
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_csr_name }}"
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_crt_name }}"

@@ -20,26 +20,26 @@
         dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
 
         # This is the name and ip-adress of the system to which the ssl-certificate will be applied
-        server_dns_name: "test-server"
+        dnsname: "test-server"
         server_ip: "192.168.0.1"
         # Here you can define the FQDN of the Root-CA
         organization:
           # server: "/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA"
-          server: "/CN={{server_dns_name}}/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=patrick.jahn@sva.de/O=BW/OU=Marine"
+          server: "/CN={{dnsname}}/ST=Niedersachsen/C=DE/L=Wilhelmshaven/E=patrick.jahn@sva.de/O=BW/OU=Marine"
 
         # Here you can define the length of your rootCA-certificate and server-cert angeben
         days:
           server_crt: "1825" # 5 years for the server-certificate
 
         # Name of the Server Cert, Key und CSR
-        ssl_server_key_name: "{{server_dns_name}}.key"
-        ssl_server_csr_name: "{{server_dns_name}}.csr"
-        ssl_server_crt_name: "{{server_dns_name}}.crt"
+        ssl_server_key_name: "{{dnsname}}.key"
+        ssl_server_csr_name: "{{dnsname}}.csr"
+        ssl_server_crt_name: "{{dnsname}}.crt"
         ssl_server_passphrase_for_private_key: "Test1234"
 
         # Alternative DNS-Names
         ## for the Server
         server_dns_alt_names:
-          dns1: "{{server_dns_name}}"
+          dns1: "{{dnsname}}"
           dns2: "{{server_ip}}"
           dns3: "*.artifactory.home.local"

@@ -1,16 +1,37 @@
 ---
-# Erstellen des private-key
-# - name: "Private Key für Server-Zertifikat erstellen"
-#   raw: "/usr/bin/openssl genpkey -algorithm RSA -out {{ dir_new_ssl_certs }}{{ ssl_server_key_name }} -aes256"
+- name: "Prüfe, ob die Dateien existieren"
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_key_name }}"
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_csr_name }}"
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_crt_name }}"
+  register: ssl_files_stat
 
-# Erstellen des csr
-# - name: "SSL-Zertifikats-Request (CSR) für Server-Zertifikat erstellen"
-#   raw: "/usr/bin/openssl req -x509 -new -key {{ dir_new_ssl_certs }}{{ssl_server_key_name}} -out {{ dir_new_ssl_certs }}{{server_cert.ssl_server_csr_name}} -days 3650 -subj \"/C=DE/ST=Hessen/L=Wiesbasen/OU=KBS/CN=serverLA\""
+- name: "Erstelle Liste der existierenden Dateien"
+  ansible.builtin.set_fact:
+    existing_files: "{{ ssl_files_stat.results | selectattr('stat.exists', 'equalto', true) | map(attribute='item') | list }}"
 
+- name: "Formatiere existierende Dateien"
+  ansible.builtin.set_fact:
+    formatted_existing_files: "{{ existing_files | map('regex_replace', '^(.*)$', '- \\1') | join('\n') }}"
+
+- name: "Fehler ausgeben, wenn Dateien existieren"
+  ansible.builtin.fail:
+    msg: |
+      Die folgenden Dateien existieren bereits:
+      {{ formatted_existing_files }}
+
+      Um die Dateien zu überschreiben, führe den Befehl noch einmal aus und hänge: '-e "overwrite_existing=true"' ans Ende dran.
+      Dadurch wird ein neuer private Key und ein neues Zertifikat generiert und das vorhandene überschrieben.
+  when:
+    - not (overwrite_existing | default(false) | bool)
+    - existing_files | length > 0
+
+# Create the Certificate-Signing-Request
 - name: "SSL-Zertifikats-Request (CSR) für Server-Zertifikat erstellen"
-  raw: "/usr/bin/openssl req -newkey rsa:2048 -keyout {{ dir_new_ssl_certs }}{{ssl_server_key_name}} -out {{ dir_new_ssl_certs }}{{ssl_server_csr_name}} -days {{ days.server_crt }} -passout pass:{{ssl_server_passphrase_for_private_key}} -subj \"{{distinguished_name.server}}\" -reqexts SAN -config <(cat {{dir_rootca_cnf}}openssl.cnf <(printf \"\n[SAN]\nsubjectAltName=DNS.1:{{server_dns_alt_names_dns1}},DNS.2:{{server_dns_alt_names_dns2}}\"))"
+  ansible.builtin.raw: "/usr/bin/openssl req -newkey rsa:2048 -keyout {{ dir_new_ssl_certs }}{{ssl_server_key_name}} -out {{ dir_new_ssl_certs }}{{ssl_server_csr_name}} -days {{ server_crt_days }} -passout pass:{{ssl_server_passphrase_for_private_key}} -subj \"{{distinguished_name.server}}\" -reqexts SAN -config <(cat {{dir_rootca_cnf}}openssl.cnf <(printf \"\n[SAN]\nsubjectAltName=DNS.1:{{alt1}},DNS.2:{{alt2}}\"))"
 
-# CSR von RootCA signieren (Zertifikat ausstellen)
+# Approve the CSR via RootCA (sign the certificate)
 - name: "SSL-Zertifikats-Request (CSR) signieren und SSL-Zertifikat ausstellen"
-  raw: "openssl x509 -req -in {{ dir_new_ssl_certs }}{{ssl_server_csr_name}} -passin pass:{{rootca_server_passphrase_for_private_key}} -CA {{ dir_rootca }}{{rootca_server_crt_name}} -CAkey {{ dir_rootca }}{{rootca_server_key_name}} -CAcreateserial -out {{ dir_new_ssl_certs }}{{ssl_server_crt_name}} -days {{ days.server_crt }} -extensions server_cert -extfile <(printf \"[server_cert]\nbasicConstraints = CA:FALSE\nkeyUsage = digitalSignature, keyEncipherment\nextendedKeyUsage = serverAuth\nsubjectAltName = @alt_names\n[ alt_names ]\n DNS.1={{server_dns_alt_names_dns1}}\nDNS.2={{server_dns_alt_names_dns2}}\nDNS.3={{server_dns_alt_names_dns3}}\")"
-
+  ansible.builtin.raw: "openssl x509 -req -in {{ dir_new_ssl_certs }}{{ssl_server_csr_name}} -passin pass:{{rootca_server_passphrase_for_private_key}} -CA {{ dir_rootca }}{{rootca_server_crt_name}} -CAkey {{ dir_rootca }}{{rootca_server_key_name}} -CAcreateserial -out {{ dir_new_ssl_certs }}{{ssl_server_crt_name}} -days {{ server_crt_days }} -extensions server_cert -extfile <(printf \"[server_cert]\nbasicConstraints = CA:FALSE\nkeyUsage = digitalSignature, keyEncipherment\nextendedKeyUsage = serverAuth\nsubjectAltName = @alt_names\n[ alt_names ]\n DNS.1={{alt1}}\nDNS.2={{alt2}}\nDNS.3={{alt3}}\")"

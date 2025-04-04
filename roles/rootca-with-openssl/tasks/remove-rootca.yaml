@@ -1,0 +1,24 @@
+### PLEASE be careful with this. It removes the folder of your PKI
+- name: "Debug: Zeige den Wert von dir"
+  ansible.builtin.debug:
+    msg: "dir ist: {{ dir | default('nicht gesetzt') }}"
+
+- name: "Überprüfe, ob der Ordner {{ dir | default('my-root-ca') }} existiert"
+  ansible.builtin.stat:
+    path: "{{ dir | default('my-root-ca') }}"
+  register: rootca_status
+
+- name: "Erstelle Backup-Verzeichnis (falls nicht vorhanden)"
+  ansible.builtin.file:
+    path: "backup"
+    state: directory
+  when: rootca_status.stat.exists
+
+- name: "Setze den Backup-Zielpfad inklusive Datum und Uhrzeit"
+  set_fact:
+    backup_dest: "backup/{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+  when: rootca_status.stat.exists
+
+- name: "Verschiebe den Ordner {{ dir | default('my-root-ca') }} in das Backup-Verzeichnis"
+  ansible.builtin.shell: "mv -T '{{ dir | default('my-root-ca') }}' '{{ backup_dest }}'"
+  when: rootca_status.stat.exists

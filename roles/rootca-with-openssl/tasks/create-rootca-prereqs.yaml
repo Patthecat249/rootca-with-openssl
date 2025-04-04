@@ -1,8 +1,18 @@
 ---
 # tasks file for rootca-with-openssl
+- name: "Überprüfe, ob der Ordner {{ dir_rootca }} bereits existiert"
+  ansible.builtin.stat:
+    path: "{{ dir_rootca }}"
+  register: rootca_status
+
+- name: "Abbruch, falls der Ordner {{ dir_rootca }} existiert"
+  ansible.builtin.fail:
+    msg: "Der Ordner {{ dir_rootca }} existiert bereits. Wenn du diesen überschreibst, wird deine PKI zerstört."
+  when: rootca_status.stat.exists
+
 - name: "Create Working Directories for openssl-rootca"
   ansible.builtin.file:
-    path: "{{item}}"
+    path: "{{ item }}"
     state: directory
   loop:
     - "{{ dir_rootca }}"

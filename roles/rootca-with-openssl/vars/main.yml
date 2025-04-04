@@ -4,25 +4,25 @@
 ## This will be use by the request to create the rootca-certificate and is used by Task "Certificate Request (CSR) für RootCA erstellen"
 # distinguished_name: "/CN=PrivateRootCA/C=DE/ST=Berlin/L=Berlin/OU=Home"
 distinguished_name:
-  rootca: "/CN=PrivateRootCA/C=DE/ST=Berlin/L=Berlin/OU=Home"
-  server: "/CN={{ssl_server_name}}.{{root_domain}}"
+  rootca: "/CN=PrivateRootCA/C=DE/ST=Local/L=Cottbus/OU=Home"
+  server: "/CN={{ dnsname }}.{{ root_domain }}"
 
 # This is your dns-name of your base-domain. You can only create ssl-certificates in your dns-schema
 root_domain: "home.local"
 
 # The name of your RootCA-Server-Hostname, the private-key-name and the ssl-certificate-name of your rootCA
-rootca_server_name: "pki01"
-rootca_server_ip: "10.0.249.82"
-rootca_server_crt_name: "{{rootca_server_name}}-rootca.crt"
-rootca_server_key_name: "{{rootca_server_name}}-rootca.key"
+rootca_server_name: "pi"
+rootca_server_ip: "172.16.249.53"
+rootca_server_crt_name: "{{ rootca_server_name }}-rootca.crt"
+rootca_server_key_name: "{{ rootca_server_name }}-rootca.key"
 rootca_server_passphrase_for_private_key: "Test1234"
 
 # The name of a Server, the private-key and the ssl-certificate of a server
-ssl_server_name: "patricks-server"
-ssl_server_ip: "10.0.249.82"
-ssl_server_key_name: "{{ssl_server_name}}.key"
-ssl_server_csr_name: "{{ssl_server_name}}.csr"
-ssl_server_crt_name: "{{ssl_server_name}}.crt"
+dnsname: "pi"
+serverip: "172.16.249.53"
+ssl_server_key_name: "{{ dnsname }}.{{ root_domain }}.key"
+ssl_server_csr_name: "{{ dnsname }}.{{ root_domain }}.csr"
+ssl_server_crt_name: "{{ dnsname }}.{{ root_domain }}.crt"
 ssl_server_passphrase_for_private_key: "Test1234"
 
 # These vars define the folder structure of your ROOT-CA
@@ -43,7 +43,7 @@ dir_rootca_serial: "{{ dir_rootca }}serial/"
 dir_rootca_cnf: "{{ dir_rootca }}cnf/"
 
 # This is the folder, where new ssl-server-certificates will be placed
-dir_new_ssl_certs: "{{dir}}new-created-ssl-certs/"
+dir_new_ssl_certs: "{{ dir }}new-created-ssl-certs/"
 
 
 
@@ -55,11 +55,11 @@ days:
 
 # Alternative DNS-Namen
 ## Für die openssl.cnf
-dns_alt_names_dns1: "{{rootca_server_name}}"
-dns_alt_names_dns2: "{{rootca_server_name}}.{{root_domain}}"
-dns_alt_names_dns3: "{{rootca_server_ip}}"
+dns_alt_names_dns1: "{{ rootca_server_name }}"
+dns_alt_names_dns2: "{{ rootca_server_name }}.{{ root_domain }}"
+dns_alt_names_dns3: "{{ rootca_server_ip }}"
 
 ## Für den Server
-server_dns_alt_names_dns1: "{{ssl_server_name}}"
-server_dns_alt_names_dns2: "{{ssl_server_name}}.{{root_domain}}"
-server_dns_alt_names_dns3: "{{ssl_server_ip}}"
+alt1: "{{ dnsname }}"
+alt2: "{{ dnsname }}.{{ root_domain }}"
+alt3: "{{ serverip }}"

@@ -8,10 +8,25 @@ mkdir git && cd git
 git clone https://github.com/Patthecat249/rootca-with-openssl.git
 
 # Change to ansible-directory
-cd rootca-with-openssl/ansible
+cd rootca-with-openssl
 
-# Execute the Playbook
+# Execute the Playbook to create the RootCA
 ansible-playbook 01-playbook-create-rootca.yaml
+
+# Create a private-key, csr and the ssl-server-certificate
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver"
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver" -e "server_crt_days=720"
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver" -e "server_crt_days=720" -e "overwrite_existing=true"
+```
+
+# Troubleshooting
+
+```bash
+# Check ssl-certs in folder
+ansible pi -m raw -a "ls -l my-root-ca/new-created-ssl-certs"
+
+# Show SSL-Certificate
+ansible pi -m raw -a "openssl x509 -noout -text -in my-root-ca/new-created-ssl-certs/patrick3.home.local.crt"
 ```
 
 # How it works
@@ -24,4 +39,4 @@ If you want to change the Subject, the private key, or the folder, where everyth
 - Manipulate the `main.yaml` in the folder `vars` in the Ansible-Role-Folder `rootca-with-openssl`
 
 # Disclaimer
-This Setup is only tested in a lab environment and not in production state. It is more a learning experience project than a prduction-ready installation. The project was instantiated by the will of learning more about the SSL-Technology. 
+This Setup is only tested in a lab environment and not in production state. It is more a learning experience project than a prduction-ready installation. The project was instantiated by the will of learning more about the SSL-Technology.
