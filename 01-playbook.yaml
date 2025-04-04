@@ -1,0 +1,7 @@
+- name: PKI
+  hosts: localhost
+  tasks:
+    - name: "Include ansible-role-openssl"
+      ansible.builtin.include_role:
+        name: "test"
+        # name: "ansible-role-openssl"
