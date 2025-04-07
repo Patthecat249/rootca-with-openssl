@@ -17,6 +17,16 @@ ansible-playbook 01-playbook-create-rootca.yaml
 ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver"
 ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver" -e "server_crt_days=720"
 ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=patrick3" -e "serverip=172.16.249.233" -e "alt1=myserver" -e "server_crt_days=720" -e "overwrite_existing=true"
+
+# Fritzbox
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=fritzbox" -e "serverip=172.16.249.1" -e "alt1=fb" -e "alt2=fb.home.local" -e "server_crt_days=720"
+
+# NAS
+ansible-playbook 02-playbook-create-ssl-server-certificate.yaml -e "dnsname=nas" -e "serverip=172.16.249.150" -e "alt1=synology" -e "server_crt_days=720"
+
+# Passphrase entfernen vom Key
+# openssl rsa -in <encrypted-key> -out <decrypted-key>
+openssl rsa -in my-root-ca/new-created-ssl-certs/nas.home.local.key -out my-root-ca/new-created-ssl-certs/nas.home.local-nopassphrase.key
 ```
 
 # Troubleshooting

@@ -1,9 +1,12 @@
 ### PLEASE be careful with this. It removes the folder of your PKI
-- name: "Debug: Zeige den Wert von dir"
-  ansible.builtin.debug:
-    msg: "dir ist: {{ dir | default('nicht gesetzt') }}"
+- name: "Prüfe, ob 'are_you_sure' auf true gesetzt ist"
+  ansible.builtin.fail:
+    msg: >
+      Das Playbook wird abgebrochen, da 'are_you_sure' nicht auf true gesetzt ist.
+      Bitte führe das Playbook mit 'are_you_sure: true' aus, um fortzufahren.
+  when: not (are_you_sure | default(false) | bool)
 
-- name: "Überprüfe, ob der Ordner {{ dir | default('my-root-ca') }} existiert"
+- name: "Überprüfe, ob der Ordner existiert"
   ansible.builtin.stat:
     path: "{{ dir | default('my-root-ca') }}"
   register: rootca_status
@@ -15,7 +18,7 @@
   when: rootca_status.stat.exists
 
 - name: "Setze den Backup-Zielpfad inklusive Datum und Uhrzeit"
-  set_fact:
+  ansible.builtin.set_fact:
     backup_dest: "backup/{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
   when: rootca_status.stat.exists
 

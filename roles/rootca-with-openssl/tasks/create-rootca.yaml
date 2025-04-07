@@ -5,4 +5,4 @@
 
 # Certificate Request (CSR) für RootCA erstellen
 - name: "Certificate Request (CSR) für RootCA erstellen"
-  raw: "/usr/bin/openssl req -x509 -new -key {{ dir_rootca }}{{rootca_server_key_name}} -out {{ dir_rootca }}{{rootca_server_crt_name}} -days {{ days.rootca }} -config {{dir_rootca_cnf}}openssl.cnf -subj \"{{distinguished_name.rootca}}\" -passin pass:{{rootca_server_passphrase_for_private_key}}"
+  raw: "/usr/bin/openssl req -x509 -new -key {{ dir_rootca }}{{rootca_server_key_name}} -out {{ dir_rootca }}{{rootca_server_crt_name}} -days {{ rootca_days }} -config {{dir_rootca_cnf}}openssl.cnf -subj \"{{distinguished_name.rootca}}\" -passin pass:{{rootca_server_passphrase_for_private_key}}"

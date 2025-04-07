@@ -49,9 +49,8 @@ dir_new_ssl_certs: "{{ dir }}new-created-ssl-certs/"
 
 # Hier kann man die Gültigkeitslänge der Zertifikate angeben
 # Here you can set up the validity-length of your certificates
-days:
-  rootca: "3650" # 10 years in days for your rootCA
-  server_crt: "1825" # 5 years in days for your Server-Certificate
+rootca_days: "3650"     # 10 years in days for your rootCA
+server_crt_days: "720"  # 2 years in days for your SSL-Server-Certificate
 
 # Alternative DNS-Namen
 ## Für die openssl.cnf

@@ -4,6 +4,8 @@
   become_user: pi
   become: false
   gather_facts: true
+  vars:
+    are_you_sure: false
   # Beginn TASKs
   tasks:
     # Remove the RootCA
