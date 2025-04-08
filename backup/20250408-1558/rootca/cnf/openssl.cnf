@@ -3,7 +3,7 @@ default_ca = pi
 
 [ myCA ]
 dir = ./example-my-root-ca/
-certificate = ./example-my-root-ca/rootca/RootCA-Patrick-Jahn.crt
+certificate = ./example-my-root-ca/rootca/pi-rootca.crt
 database = ./example-my-root-ca/rootca/database/index.txt
 new_certs_dir = ./example-my-root-ca/new-created-ssl-certs/
 serial = ./example-my-root-ca/rootca/serial/serial

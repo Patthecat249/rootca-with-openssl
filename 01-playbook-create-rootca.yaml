@@ -3,26 +3,28 @@
   connection: local
   # become_user: pi
   gather_facts: false
+  roles:
+    - rootca-with-openssl
 
-# Beginn TASKs
-  tasks:
-    # - import_role:
-    #     name: rootca-with-openssl
+# # Beginn TASKs
+#   tasks:
+#     # - import_role:
+#     #     name: rootca-with-openssl
 
-# Create prerequisites of the RootCA
-    - name: Run setup of rootCA-Folder-Structure
-      ansible.builtin.import_role:
-        name: rootca-with-openssl
-        tasks_from: create-rootca-prereqs.yaml
+# # Create prerequisites of the RootCA
+#     - name: Run setup of rootCA-Folder-Structure
+#       ansible.builtin.import_role:
+#         name: rootca-with-openssl
+#         tasks_from: create-rootca-prereqs.yaml
 
-# Create the RootCA private-Key, csr and crt
-    - name: Run Creation of rootCA
-      ansible.builtin.import_role:
-        name: rootca-with-openssl
-        tasks_from: create-rootca.yaml
+# # Create the RootCA private-Key, csr and crt
+#     - name: Run Creation of rootCA
+#       ansible.builtin.import_role:
+#         name: rootca-with-openssl
+#         tasks_from: create-rootca.yaml
 
-# Create the server-Certifikat for serverLA
-    - name: Run Creation of server-certificate
-      ansible.builtin.import_role:
-        name: rootca-with-openssl
-        tasks_from: create-server-certificate.yaml
+# # Create the server-Certifikat for serverLA
+#     - name: Run Creation of server-certificate
+#       ansible.builtin.import_role:
+#         name: rootca-with-openssl
+#         tasks_from: create-server-certificate.yaml

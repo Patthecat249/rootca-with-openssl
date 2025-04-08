@@ -23,8 +23,8 @@ root_domain: "home.local"
 # The name of your RootCA-Server-Hostname, the private-key-name and the ssl-certificate-name of your rootCA
 rootca_server_name: "pi"
 rootca_server_ip: "172.16.249.53"
-rootca_server_crt_name: "{{ rootca_server_name }}-rootca.crt"
-rootca_server_key_name: "{{ rootca_server_name }}-rootca.key"
+rootca_server_crt_name: "{{ rootca_cn }}.crt"
+rootca_server_key_name: "{{ rootca_cn }}.key"
 rootca_server_passphrase_for_private_key: "Test1234"
 
 # The name of a Server, the private-key and the ssl-certificate of a server
