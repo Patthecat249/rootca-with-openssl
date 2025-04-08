@@ -7,3 +7,4 @@
     - "{{ dir_new_ssl_certs }}{{ ssl_server_key_name }}"
     - "{{ dir_new_ssl_certs }}{{ ssl_server_csr_name }}"
     - "{{ dir_new_ssl_certs }}{{ ssl_server_crt_name }}"
+    - "{{ dir_new_ssl_certs }}{{ ssl_server_key_name }}.nopassphrase"
