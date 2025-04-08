@@ -37,7 +37,7 @@ ssl_server_passphrase_for_private_key: "Test1234"
 
 # These vars define the folder structure of your ROOT-CA
 # Only customize the "dir"-variable
-dir: "./my-root-ca/"
+dir: "./example-my-root-ca/"
 
 # This is the folder, where your rootca-certificate and your private key will be placed
 dir_rootca: "{{ dir }}rootca/"
