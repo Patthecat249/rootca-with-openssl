@@ -3,8 +3,18 @@
 # Here you must define your Distingushed Name of your Root-CA
 ## This will be use by the request to create the rootca-certificate and is used by Task "Certificate Request (CSR) für RootCA erstellen"
 # distinguished_name: "/CN=PrivateRootCA/C=DE/ST=Berlin/L=Berlin/OU=Home"
+rootca_c: "DE"                          # Country
+rootca_st: "Brandenburg"                # State/Province
+rootca_l: "Cottbus"                     # City
+rootca_o: "Private"                     # Organisation
+rootca_ou: "Home"                       # Organisational Unit
+rootca_cn: "RootCA-Patrick-Jahn"        # Common Name
+rootca_email: "privat@patrickjahn.de"   # Email-Adress
+
 distinguished_name:
-  rootca: "/CN=PrivateRootCA/C=DE/ST=Local/L=Cottbus/OU=Home"
+  # /C=DE/ST=Bayern/L=München/O=Example Corporation/OU=Root CA/CN=Example RootCA
+  # rootca: "/C={{ rootca_c }}/ST={{ rootca_st }}/L={{ rootca_l }}/O={{ rootca_o }}/OU={{ rootca_ou }}/CN={{ rootca_cn }}/emailAddress={{ rootca_email }}"   # /CN=RootCA-Patrick-Jahn/C=DE/ST=Brandenburg/L=Cottbus/OU=Home
+  rootca: "/C={{ rootca_c }}/ST={{ rootca_st }}/L={{ rootca_l }}/O={{ rootca_o }}/OU={{ rootca_ou }}/CN={{ rootca_cn }}"
   server: "/CN={{ dnsname }}.{{ root_domain }}"
 
 # This is your dns-name of your base-domain. You can only create ssl-certificates in your dns-schema
