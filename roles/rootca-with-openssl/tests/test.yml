@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: pi
   remote_user: root
   roles:
     - rootca-with-openssl

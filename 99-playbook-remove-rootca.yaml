@@ -1,7 +1,7 @@
 # Remove the rootCA
 - name: "### --- Playbook to remove the rootCA --- ###"
-  hosts: localhost
-  connection: local
+  hosts: pi
+  # connection: local
   # become_user: pi
   become: false
   gather_facts: true

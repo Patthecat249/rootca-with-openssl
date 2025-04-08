@@ -1,6 +1,6 @@
 - name: "### --- Playbook to create a rootCA with openssl --- ###"
-  hosts: localhost
-  connection: local
+  hosts: pi
+  # connection: local
   # become_user: pi
   gather_facts: false
   roles:
